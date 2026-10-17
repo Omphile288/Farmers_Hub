@@ -128,7 +128,12 @@
             .row { grid-template-columns:1fr; }
             .hero h1 { font-size:34px; }
         }
-    </style>
+            .site-footer{width:min(1100px,calc(100% - 40px));margin:22px auto 0;padding:24px 30px;border:1px solid #d7e3d3;border-radius:16px;background:#183f2a;color:#f3f7ed;font-family:'DM Sans',Arial,sans-serif;line-height:1.5}
+        .site-footer-content{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:18px 32px}
+        .site-footer h2{margin:0 0 7px;color:#fff;font:700 19px Manrope,Arial,sans-serif}
+        .site-footer p{margin:4px 0;color:#e1ecde;font-size:14px}
+        .site-footer a{color:#d5edc9}
+        @media(max-width:600px){.site-footer{width:calc(100% - 22px);margin-top:14px;padding:20px;border-radius:14px}}</style>
 </head>
 <body>
 <header>
@@ -476,7 +481,7 @@
     updatePreview();
     renderProducts();
 </script>
-     <footer class="site-footer" aria-labelledby="farmer-hub-contact-title">
+    <footer class="site-footer" aria-labelledby="farmer-hub-contact-title">
         <div class="site-footer-content">
             <div>
                 <h2 id="farmer-hub-contact-title">Contact Farmer_Hub</h2>
