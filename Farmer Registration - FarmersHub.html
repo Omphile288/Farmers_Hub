@@ -19,7 +19,7 @@
 		<tr>
 		<td><label for="farmerName">Farmer Name</label></td>
 		<td>
-		<input type="text" id="farmerName" autocomplete="name" required>
+		<input type="text" id="farmerName" autocomplete="name" pattern="[A-Za-zÀ-ÖØ-öø-ÿ ]+" title="Use letters and spaces only." required>
 		</td>
 		</tr>
 
@@ -31,9 +31,9 @@
 		</tr>
 
 		<tr>
-		<td><label for="contact">Phone Number / Email</label></td>
+		<td><label for="contact">Phone Number (10 digits)</label></td>
 		<td>
-		<input type="text" id="contact" autocomplete="email" required>
+		<input type="tel" id="contact" inputmode="numeric" pattern="[0-9]{10}" minlength="10" maxlength="10" title="Enter exactly 10 digits." autocomplete="tel" required>
 		</td>
 		</tr>
 
@@ -50,6 +50,16 @@
 <script>
 const farmerForm = document.getElementById('farmerForm');
 const farmerRecordKey = 'farmersHubCurrentFarmer';
+const farmerNameInput = document.getElementById('farmerName');
+const farmerPhoneInput = document.getElementById('contact');
+
+farmerNameInput.addEventListener('input', () => {
+    farmerNameInput.value = farmerNameInput.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]/g, '');
+});
+
+farmerPhoneInput.addEventListener('input', () => {
+    farmerPhoneInput.value = farmerPhoneInput.value.replace(/[^0-9]/g, '').slice(0, 10);
+});
 
 farmerForm.addEventListener('submit', (event) => {
     event.preventDefault();
