@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#183f2a">
+    <title>Farmer Dashboard - FarmersHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *{box-sizing:border-box}body{margin:0;padding:28px 18px 56px;background:#f4f7f1;color:#24372b;font-family:'DM Sans',Arial,sans-serif;line-height:1.5}.container{width:min(1100px,100%);margin:0 auto;padding:0 34px 30px;background:#fff;border:1px solid #e2e9df;border-radius:20px;box-shadow:0 18px 55px #183f2a12;overflow:hidden}.page-banner{margin:0 -34px 25px;padding:27px 34px 26px;background:linear-gradient(90deg,rgba(19,53,35,.84),rgba(19,53,35,.22)),url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1400&q=82') center 55%/cover;color:#fff}.eyebrow{margin:0 0 6px;color:#e1f0d8;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}.page-banner h1{margin:0;color:#fff;font:800 30px/1.2 Manrope,Arial,sans-serif;letter-spacing:-.035em}.page-banner p{margin:7px 0 0;color:#f3f7ed;font-size:14px}.header-details{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:12px;color:#f3f7ed;font-size:14px}.header-details span{display:inline-block}.top-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:10px;margin:0 0 20px}.button-link{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:9px 15px;border-radius:9px;background:#23643c;color:#fff;font-weight:700;text-decoration:none}.button-link.secondary{background:#edf3e9;color:#285537}.section-title{margin:25px 0 10px;color:#2a5738;font:700 20px Manrope,Arial,sans-serif}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}.metric,.panel{padding:18px;border:1px solid #e0e9dc;border-radius:14px;background:#f7faf5}.metric p{margin:0;color:#66766b;font-size:13px;font-weight:700}.metric strong{display:block;margin-top:6px;color:#245537;font:800 26px Manrope,Arial,sans-serif}.metric small{color:#66766b}.panel{margin-top:16px;background:#fff}.panel h3{margin:0 0 11px;color:#2a5738;font:700 17px Manrope,Arial,sans-serif}.progress-track{height:12px;border-radius:99px;background:#e7eee3;overflow:hidden}.progress-bar{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#4c855a,#8fb878);transition:width .3s}.progress-copy{display:flex;justify-content:space-between;gap:10px;margin-top:8px;color:#526658;font-size:13px}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse}th{padding:11px 10px;background:#edf4e9;color:#365642;text-align:left;font-size:13px}td{padding:11px 10px;border-top:1px solid #edf0eb;font-size:14px;vertical-align:top}.order-card{margin:11px 0 0;padding:15px;border:1px solid #e1e8de;border-radius:11px;background:#fbfcfa}.order-card p{margin:5px 0;font-size:14px}.empty-state{padding:18px;border:1px dashed #cbd9c7;border-radius:10px;color:#66766b;text-align:center}.contact-link{color:#23643c}.site-footer{width:min(1100px,calc(100% - 40px));margin:22px auto 0;padding:24px 30px;border:1px solid #d7e3d3;border-radius:16px;background:#183f2a;color:#f3f7ed}.site-footer-content{display:flex;flex-wrap:wrap;justify-content:space-between;gap:18px 32px}.site-footer h2{margin:0 0 7px;color:#fff;font:700 19px Manrope,Arial,sans-serif}.site-footer p{margin:4px 0;color:#e1ecde;font-size:14px}.site-footer a{color:#d5edc9}@media(max-width:760px){.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){body{padding:12px 10px 30px}.container{padding:0 20px 24px;border-radius:15px}.page-banner{margin:0 -20px 18px;padding:23px 20px}.page-banner h1{font-size:26px}.metrics{gap:9px}.metric{padding:14px}.metric strong{font-size:22px}.site-footer{width:calc(100% - 22px);margin-top:14px;padding:20px}}@media(max-width:390px){.container{padding-right:15px;padding-left:15px}.page-banner{margin-right:-15px;margin-left:-15px;padding-right:15px;padding-left:15px}}
+            .order-status{margin:10px 0;color:#405448;font-size:14px}.order-status span{display:inline-block;margin-left:5px;padding:3px 9px;border-radius:99px;background:#edf3e9;color:#285537;font-size:12px;font-weight:700}.order-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:13px}.order-actions button{min-height:38px;padding:8px 13px;border:0;border-radius:8px;background:#23643c;color:#fff;font:700 13px 'DM Sans',Arial,sans-serif;cursor:pointer}.order-actions button:hover{background:#17492d}.order-actions button.decline{border:1px solid #d3ddd0;background:#fff;color:#526658}.order-actions button.decline:hover{background:#f4f7f1}
+            .request-card{margin:11px 0 0;padding:15px;border:1px solid #d9e5d5;border-radius:11px;background:#f7faf5}.request-card p{margin:5px 0;font-size:14px}.request-status{display:inline-block;margin-left:6px;padding:3px 9px;border-radius:99px;background:#edf3e9;color:#285537;font-size:12px;font-weight:700}.request-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}.request-actions button{min-height:38px;padding:8px 13px;border:0;border-radius:8px;background:#23643c;color:#fff;font:700 13px 'DM Sans',Arial,sans-serif;cursor:pointer}.request-actions button.decline{border:1px solid #d3ddd0;background:#fff;color:#526658}.hint{color:#66766b;font-size:13px}
+    </style>
+</head>
+<body>
+    <main class="container">
+        <header class="page-banner">
+            <p class="eyebrow">Farmer account</p>
+            <h1 id="farmerTitle">Your Farm Dashboard</h1>
+            <p id="farmLocation">Your farm information and activity.</p>
+            <div class="header-details"><span id="farmerId"></span><span id="farmerPhone"></span></div>
+        </header>
+        <div class="top-actions">
+            <a class="button-link secondary" href="Farmer Product Listing - FarmersHub.html">List a Product</a>
+            <a class="button-link secondary" href="index.html">Home</a>
+            <a class="button-link" href="Login - FarmersHub.html" id="logoutLink">Log Out</a>
+        </div>
+        <section aria-labelledby="overview-title">
+            <h2 class="section-title" id="overview-title">Farm Overview</h2>
+            <div class="metrics">
+                <div class="metric"><p>Registered Customers</p><strong id="customerCount">0</strong><small>Customers saved on this browser</small></div>
+                <div class="metric"><p>Sales</p><strong id="salesCount">0</strong><small>Orders received</small></div>
+                <div class="metric"><p>Sales Total</p><strong id="salesTotal">R0.00</strong><small>From your products</small></div>
+                <div class="metric"><p>Monthly Fee</p><strong>R50.00</strong><small>Subscription fee due</small></div>
+            </div>
+            <div class="panel">
+                <h3>Farm Progress</h3>
+                <p id="progressDescription">Your sold stock progress will appear here.</p>
+                <div class="progress-track" role="progressbar" aria-label="Share of listed stock sold" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar" id="progressBar"></div></div>
+                <div class="progress-copy"><span>Sold: <strong id="soldUnits">0</strong></span><span>Available: <strong id="availableUnits">0</strong></span><span id="progressPercent">0%</span></div>
+            </div>
+        </section>
+        <section aria-labelledby="registered-customers-title">
+            <h2 class="section-title" id="registered-customers-title">Registered Customers</h2>
+            <div class="panel table-wrap" id="registeredCustomersPanel"></div>
+        </section>
+        <section aria-labelledby="products-title">
+            <h2 class="section-title" id="products-title">Your Listed Products</h2>
+            <div class="panel table-wrap" id="productsPanel"></div>
+        </section>
+        <section aria-labelledby="approval-title">
+            <h2 class="section-title" id="approval-title">Customer Approval Requests <span id="pendingRequestCount"></span></h2>
+            <p class="hint">New requests from customers appear here. Approve or decline each request to update its status on the customer dashboard.</p>
+            <div id="approvalRequestsPanel"></div>
+        </section>
+        <section aria-labelledby="orders-title">
+            <h2 class="section-title" id="orders-title">Customer Orders and Contact Details</h2>
+            <p class="hint">See what each customer wants, along with their delivery address and phone number.</p>
+            <div id="ordersPanel"></div>
+        </section>
+    </main>
+    <footer class="site-footer" aria-labelledby="farmer-hub-contact-title">
+        <div class="site-footer-content"><div><h2 id="farmer-hub-contact-title">Contact Farmer_Hub</h2><p>Get in touch with the Farmer_Hub team.</p></div><div><p><strong>Phone:</strong> <a href="tel:0813891994">0813891994</a></p><p><strong>Email:</strong> <a href="mailto:Farmers_Hub@gmail.com">Farmers_Hub@gmail.com</a></p><p><strong>Address:</strong> Holding 12, Buffelsdrift Agricultural Holdings, Pretoria North, Gauteng, 0182</p></div></div>
+    </footer>
+    <script>
+        function readList(key) {
+            try { const value = JSON.parse(localStorage.getItem(key) || '[]'); return Array.isArray(value) ? value : []; }
+            catch (error) { console.warn(`Saved ${key} could not be loaded.`, error); return []; }
+        }
+        const farmerId = sessionStorage.getItem('farmersHubLoginId');
+        let farmer = null;
+        try { farmer = JSON.parse(localStorage.getItem('farmersHubCurrentFarmer') || 'null'); } catch (error) { console.warn('Farmer details could not be loaded.', error); }
+        if (sessionStorage.getItem('farmersHubLoginRole') !== 'farmer' || !farmerId || !farmer || farmer.id !== farmerId) {
+            window.location.replace('Login - FarmersHub.html');
+        } else {
+            document.getElementById('farmerTitle').textContent = `Welcome, ${farmer.name}`;
+            document.getElementById('farmLocation').textContent = farmer.location || 'Farm location not provided';
+            document.getElementById('farmerId').textContent = `Farmer ID: ${farmer.id}`;
+            const phoneLine = document.getElementById('farmerPhone');
+            phoneLine.append(document.createTextNode('Phone: '));
+            if (farmer.contact) { const phoneLink = document.createElement('a'); phoneLink.className = 'contact-link'; phoneLink.href = `tel:${farmer.contact}`; phoneLink.textContent = farmer.contact; phoneLine.appendChild(phoneLink); }
+            else phoneLine.appendChild(document.createTextNode('Not provided'));
+
+            const products = readList('farmersHubListings').filter((product) => product.farmerId === farmer.id);
+            const allOrders = readList('farmersHubOrders');
+            const orders = allOrders.map((order) => ({ ...order, items: Array.isArray(order.items) ? order.items.filter((item) => item.farmerId === farmer.id) : [] }))
+                .filter((order) => order.items.length);
+            const customers = new Map();
+            function addCustomer(phone, name, address, activity) {
+                const cleanPhone = String(phone || '').trim();
+                const cleanName = String(name || '').trim();
+                if ((!cleanPhone || cleanPhone === 'Not provided') && (!cleanName || cleanName === 'Not provided')) return;
+                const key = cleanPhone || cleanName.toLowerCase();
+                const customer = customers.get(key) || { phone: cleanPhone, name: '', address: '', activity: new Set() };
+                if (cleanPhone && cleanPhone !== 'Not provided') customer.phone = cleanPhone;
+                if (cleanName && cleanName !== 'Not provided') customer.name = cleanName;
+                if (address && address !== 'Not provided') customer.address = address;
+                if (activity) customer.activity.add(activity);
+                customers.set(key, customer);
+            }
+            readList('farmersHubCustomers').forEach((customer) => addCustomer(customer.phone, customer.name, customer.address, 'Registered'));
+            allOrders.forEach((order) => addCustomer(order.contact, order.customerName, order.address, 'Order'));
+            const allApprovalRequests = readList('farmersHubApprovalRequests');
+            allApprovalRequests.forEach((request) => addCustomer(request.customerPhone, request.customerName, request.deliveryAddress, 'Approval request'));
+            const soldUnits = orders.reduce((sum, order) => sum + order.items.reduce((itemSum, item) => itemSum + Number(item.quantity || 0), 0), 0);
+            const availableUnits = products.reduce((sum, product) => sum + Number(product.quantity || 0), 0);
+            const initialUnits = soldUnits + availableUnits;
+            const progress = initialUnits ? Math.round(soldUnits / initialUnits * 100) : 0;
+            const totalSales = orders.reduce((sum, order) => sum + order.items.reduce((itemSum, item) => itemSum + Number(item.total || Number(item.quantity) * Number(item.price)), 0), 0);
+
+            const registeredCustomersPanel = document.getElementById('registeredCustomersPanel');
+            if (!customers.size) {
+                registeredCustomersPanel.innerHTML = '<div class="empty-state">No customers are registered yet. Customers appear here when they log in, place an order, or request product approval.</div>';
+            } else {
+                const customerTable = document.createElement('table');
+                const head = customerTable.createTHead().insertRow();
+                ['Customer', 'Phone', 'Delivery Address', 'Activity'].forEach((label) => { const th = document.createElement('th'); th.textContent = label; head.appendChild(th); });
+                const body = customerTable.createTBody();
+                [...customers.values()].forEach((customer) => {
+                    const row = body.insertRow();
+                    [customer.name || 'Name not added', customer.phone || 'Phone not provided', customer.address || 'Address not added', [...customer.activity].join(', ') || 'Registered'].forEach((value) => { const cell = row.insertCell(); cell.textContent = value; });
+                });
+                registeredCustomersPanel.appendChild(customerTable);
+            }
+            document.getElementById('customerCount').textContent = customers.size;
+            document.getElementById('salesCount').textContent = orders.length;
+            document.getElementById('salesTotal').textContent = `R${totalSales.toFixed(2)}`;
+            document.getElementById('soldUnits').textContent = soldUnits;
+            document.getElementById('availableUnits').textContent = availableUnits;
+            document.getElementById('progressPercent').textContent = `${progress}%`;
+            document.querySelector('[role="progressbar"]').setAttribute('aria-valuenow', progress);
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            document.getElementById('progressDescription').textContent = initialUnits
+                ? `${soldUnits} of ${initialUnits} listed units have been ordered.`
+                : 'List products to begin tracking your farm sales progress.';
+
+            const productsPanel = document.getElementById('productsPanel');
+            if (!products.length) {
+                productsPanel.innerHTML = '<div class="empty-state">You have not listed any products yet. Use “List a Product” to add your first listing.</div>';
+            } else {
+                const table = document.createElement('table');
+                const head = table.createTHead().insertRow();
+                ['Product', 'Category', 'Price', 'Available Stock'].forEach((label) => { const th = document.createElement('th'); th.textContent = label; head.appendChild(th); });
+                const body = table.createTBody();
+                products.forEach((product) => {
+                    const row = body.insertRow();
+                    [product.productName, product.category, `R${Number(product.price).toFixed(2)} / ${product.unit}`, `${Number(product.quantity)} ${product.unit}`].forEach((value) => { const cell = row.insertCell(); cell.textContent = value; });
+                });
+                productsPanel.appendChild(table);
+            }
+
+            const approvalRequests = allApprovalRequests.filter((request) => String(request.farmerId || '').trim() === String(farmer.id || '').trim());
+            const approvalRequestsPanel = document.getElementById('approvalRequestsPanel');
+            const pendingRequests = approvalRequests.filter((request) => request.status === 'Pending farmer approval').length;
+            document.getElementById('pendingRequestCount').textContent = `(${pendingRequests} pending)`;
+            if (!approvalRequests.length) {
+                approvalRequestsPanel.innerHTML = '<div class="empty-state">No customer approval requests yet. Requests sent from the customer dashboard will appear here.</div>';
+            } else {
+                approvalRequests.forEach((request) => {
+                    const card = document.createElement('article');
+                    card.className = 'request-card';
+                    const heading = document.createElement('h3');
+                    heading.textContent = `Request from ${request.customerName || 'Customer'} · ${new Date(request.createdAt).toLocaleDateString()}`;
+                    card.appendChild(heading);
+                    [['Phone', request.customerPhone], ['Delivery Address', request.deliveryAddress], ['Product', `${request.productName} — ${request.quantity} ${request.unit}`], ['Estimated Total', `R${(Number(request.price) * Number(request.quantity)).toFixed(2)}`]].forEach(([label, value]) => {
+                        const p = document.createElement('p'); const strong = document.createElement('strong'); strong.textContent = `${label}: `; p.append(strong, document.createTextNode(value || 'Not provided')); card.appendChild(p);
+                    });
+                    const statusLine = document.createElement('p');
+                    statusLine.appendChild(document.createTextNode('Request status: '));
+                    const statusValue = document.createElement('span');
+                    statusValue.className = 'request-status';
+                    statusValue.dataset.requestStatusLabel = '';
+                    statusValue.textContent = request.status || 'Pending farmer approval';
+                    statusLine.appendChild(statusValue);
+                    card.appendChild(statusLine);
+                    if (request.status === 'Pending farmer approval') {
+                        const actions = document.createElement('div');
+                        actions.className = 'request-actions';
+                        [['Approve Request', 'Approved by farmer', 'approve'], ['Decline Request', 'Declined by farmer', 'decline']].forEach(([label, status, className]) => {
+                            const button = document.createElement('button');
+                            button.type = 'button'; button.className = className;
+                            button.dataset.requestId = request.id; button.dataset.nextRequestStatus = status;
+                            button.textContent = label; actions.appendChild(button);
+                        });
+                        card.appendChild(actions);
+                    }
+                    approvalRequestsPanel.appendChild(card);
+                });
+            }
+            const ordersPanel = document.getElementById('ordersPanel');
+            if (!orders.length) {
+                ordersPanel.innerHTML = '<div class="empty-state">No customer orders yet. New orders for your listed products will appear here.</div>';
+            } else {
+                orders.forEach((order) => {
+                    const card = document.createElement('article');
+                    card.className = 'order-card';
+                    const heading = document.createElement('h3');
+                    heading.textContent = `Order ${order.id || ''} · ${new Date(order.createdAt).toLocaleDateString()}`;
+                    card.appendChild(heading);
+                    [['Customer', order.customerName || 'Not provided'], ['Phone', order.contact || 'Not provided'], ['Delivery Address', order.address || 'Not provided']].forEach(([label, value]) => {
+                        const p = document.createElement('p'); const strong = document.createElement('strong'); strong.textContent = `${label}: `; p.append(strong, document.createTextNode(value)); card.appendChild(p);
+                    });
+                    const items = document.createElement('p');
+                    const itemsLabel = document.createElement('strong');
+                    itemsLabel.textContent = 'Wants to buy: ';
+                    items.append(itemsLabel, document.createTextNode(order.items.map((item) => `${item.product} — ${item.quantity} ${item.unit}`).join(', ')));
+                    card.appendChild(items);
+                    const statusLine = document.createElement('p');
+                    statusLine.className = 'order-status';
+                    statusLine.appendChild(document.createTextNode('Order status: '));
+                    const statusValue = document.createElement('span');
+                    statusValue.dataset.orderStatus = '';
+                    statusValue.textContent = order.status || 'Pending';
+                    statusLine.appendChild(statusValue);
+                    card.appendChild(statusLine);
+                    const actions = document.createElement('div');
+                    actions.className = 'order-actions';
+                    [['Accept Customer', 'Accepted by farmer', 'accept'], ['Decline Customer', 'Declined by farmer', 'decline']].forEach(([label, status, className]) => {
+                        const button = document.createElement('button');
+                        button.type = 'button';
+                        button.className = className;
+                        button.dataset.orderId = order.id;
+                        button.dataset.nextStatus = status;
+                        button.textContent = label;
+                        actions.appendChild(button);
+                    });
+                    card.appendChild(actions);
+                    ordersPanel.appendChild(card);
+                });
+            }
+        }
+        document.getElementById('approvalRequestsPanel').addEventListener('click', (event) => {
+            const button = event.target.closest('button[data-request-id][data-next-request-status]');
+            if (!button) return;
+            const requests = readList('farmersHubApprovalRequests');
+            const request = requests.find((item) => item.id === button.dataset.requestId);
+            if (!request) return;
+            if (request.status !== 'Pending farmer approval') return;
+            request.status = button.dataset.nextRequestStatus;
+            try {
+                localStorage.setItem('farmersHubApprovalRequests', JSON.stringify(requests));
+                const card = button.closest('.request-card');
+                card.querySelector('[data-request-status-label]').textContent = request.status;
+                const actions = card.querySelector('.request-actions');
+                if (actions) actions.remove();
+                const pendingCount = [...document.querySelectorAll('#approvalRequestsPanel [data-request-status-label]')]
+                    .filter((status) => status.textContent === 'Pending farmer approval').length;
+                document.getElementById('pendingRequestCount').textContent = `(${pendingCount} pending)`;
+            } catch (error) {
+                alert('The customer request status could not be saved in this browser. Please try again.');
+                console.warn('Approval request status could not be saved.', error);
+            }
+        });
+        const ordersPanel = document.getElementById('ordersPanel');
+        ordersPanel.addEventListener('click', (event) => {
+            const button = event.target.closest('[data-next-status]');
+            if (!button) return;
+            const savedOrders = readList('farmersHubOrders');
+            const selectedOrder = savedOrders.find((order) => order.id === button.dataset.orderId);
+            if (!selectedOrder) return;
+            selectedOrder.status = button.dataset.nextStatus;
+            try {
+                localStorage.setItem('farmersHubOrders', JSON.stringify(savedOrders));
+                const card = button.closest('.order-card');
+                card.querySelector('[data-order-status]').textContent = selectedOrder.status;
+            } catch (error) {
+                alert('The order status could not be saved in this browser. Please try again.');
+                console.warn('Order status could not be saved.', error);
+            }
+        });
+        window.addEventListener('storage', (event) => {
+            if (['farmersHubApprovalRequests', 'farmersHubCustomers', 'farmersHubOrders'].includes(event.key)) window.location.reload();
+        });
+        document.getElementById('logoutLink').addEventListener('click', () => { sessionStorage.removeItem('farmersHubLoginRole'); sessionStorage.removeItem('farmersHubLoginId'); sessionStorage.removeItem('farmersHubCustomerPhone'); });
+    </script>
+</body>
+</html>
