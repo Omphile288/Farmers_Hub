@@ -160,7 +160,7 @@
             <div class="row">
                 <div>
                     <label for="farmerId">Farmer ID</label>
-                    <input id="farmerId" type="text" placeholder="e.g. FARMER-4827" required>
+                    <input id="farmerId" type="text" placeholder="e.g. FARMER-4827" required readonly>
                 </div>
                 <div>
                     <label for="productName">Product Name</label>
@@ -267,6 +267,17 @@
 <footer>🌿 FarmersHub &nbsp; | &nbsp; Fresh Produce. Local Farmers. Stronger Communities.</footer>
 
 <script>
+    const farmerProfileKey = 'farmersHubCurrentFarmer';
+    let savedFarmerProfile = null;
+    try { savedFarmerProfile = JSON.parse(localStorage.getItem(farmerProfileKey) || 'null'); } catch (error) { console.warn('Farmer details could not be loaded.', error); }
+    function hasCompleteFarmerProfile(farmer) {
+        return Boolean(farmer && farmer.id && farmer.name && farmer.name.trim() && farmer.location && farmer.location.trim() && /^[0-9]{10}$/.test(farmer.contact || ''));
+    }
+    if (!hasCompleteFarmerProfile(savedFarmerProfile)) {
+        document.body.style.display = 'none';
+        alert('Please complete and save your farmer details before listing products.');
+        window.location.replace('Farmer Registration - FarmersHub.html');
+    }
     const LISTINGS_KEY = 'farmersHubListings';
     const form = document.getElementById('productForm');
     const productImage = document.getElementById('productImage');
@@ -441,6 +452,14 @@
     form.addEventListener('submit', (event) => {
         event.preventDefault();
 
+        let currentFarmer = null;
+        try { currentFarmer = JSON.parse(localStorage.getItem(farmerProfileKey) || 'null'); } catch (error) { console.warn('Farmer details could not be loaded.', error); }
+        if (!hasCompleteFarmerProfile(currentFarmer)) {
+            alert('Please complete and save your farmer details before publishing a product.');
+            window.location.replace('Farmer Registration - FarmersHub.html');
+            return;
+        }
+
         const productName = document.getElementById('productName').value.trim();
         const price = Number(document.getElementById('price').value);
         const quantity = Number(document.getElementById('quantity').value);
@@ -457,7 +476,7 @@
 
         const product = {
             id: `product-${Date.now()}`,
-            farmerId: document.getElementById('farmerId').value.trim(),
+            farmerId: currentFarmer.id,
             productName,
             category: document.getElementById('category').value,
             unit: document.getElementById('unit').value,
