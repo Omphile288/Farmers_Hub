@@ -53,7 +53,7 @@
             accountId.maxLength = isCustomer ? 10 : 40;
             accountId.placeholder = isCustomer ? '10-digit phone number used at checkout' : 'e.g. FARMER-12345678';
             loginHint.textContent = isCustomer
-                ? 'Use the 10-digit phone number entered when placing your order.'
+                ? 'Use the phone number saved with your customer registration details.'
                 : 'Use the Farmer ID shown after farmer registration.';
             accountId.value = '';
             message.textContent = '';
@@ -66,6 +66,9 @@
         document.getElementById('loginForm').addEventListener('submit', (event) => {
             event.preventDefault();
             message.textContent = '';
+            sessionStorage.removeItem('farmersHubLoginRole');
+            sessionStorage.removeItem('farmersHubLoginId');
+            sessionStorage.removeItem('farmersHubCustomerPhone');
             if (accountType.value === 'farmer') {
                 let farmer = null;
                 try { farmer = JSON.parse(localStorage.getItem('farmersHubCurrentFarmer') || 'null'); } catch (error) { console.warn('Farmer details could not be loaded.', error); }
@@ -84,24 +87,46 @@
                 message.textContent = 'Enter the 10-digit phone number used at checkout.';
                 return;
             }
-            sessionStorage.setItem('farmersHubLoginRole', 'customer');
-            sessionStorage.setItem('farmersHubCustomerPhone', phone);
+
+            let customerList = [];
+            let savedOrders = [];
             try {
                 const customers = JSON.parse(localStorage.getItem('farmersHubCustomers') || '[]');
-                const customerList = Array.isArray(customers) ? customers : [];
-                const savedOrders = JSON.parse(localStorage.getItem('farmersHubOrders') || '[]');
-                const savedOrder = Array.isArray(savedOrders) ? savedOrders.find((order) => order.contact === phone) : null;
-                const existingCustomer = customerList.find((customer) => customer.phone === phone);
-                const customer = existingCustomer || { phone, registeredAt: new Date().toISOString() };
-                if (savedOrder) {
-                    if (!customer.name && savedOrder.customerName !== 'Not provided') customer.name = savedOrder.customerName;
-                    if (!customer.address && savedOrder.address !== 'Not provided') customer.address = savedOrder.address;
-                }
-                if (!existingCustomer) customerList.push(customer);
-                localStorage.setItem('farmersHubCustomers', JSON.stringify(customerList));
+                const orders = JSON.parse(localStorage.getItem('farmersHubOrders') || '[]');
+                customerList = Array.isArray(customers) ? customers : [];
+                savedOrders = Array.isArray(orders) ? orders : [];
             } catch (error) {
-                console.warn('Customer registration details could not be saved.', error);
+                console.warn('Customer registration details could not be loaded.', error);
+                message.textContent = 'Customer registration details could not be checked. Please try again.';
+                return;
             }
+
+            const existingCustomer = customerList.find((customer) => customer && customer.phone === phone);
+            const registeredCustomer = existingCustomer && String(existingCustomer.name || '').trim() && String(existingCustomer.address || '').trim()
+                ? existingCustomer
+                : null;
+            const savedOrder = savedOrders.find((order) => order && order.contact === phone
+                && String(order.customerName || '').trim()
+                && order.customerName !== 'Not provided'
+                && String(order.address || '').trim()
+                && order.address !== 'Not provided');
+
+            if (!registeredCustomer && !savedOrder) {
+                message.textContent = 'Customer details are not registered. Go to Buyer Registration and save your name, delivery address, and phone number before logging in.';
+                return;
+            }
+
+            if (savedOrder) {
+                const customer = existingCustomer || { phone, registeredAt: savedOrder.createdAt || new Date().toISOString() };
+                if (!customer.name) customer.name = savedOrder.customerName;
+                if (!customer.address) customer.address = savedOrder.address;
+                if (!existingCustomer) customerList.push(customer);
+                try { localStorage.setItem('farmersHubCustomers', JSON.stringify(customerList)); }
+                catch (error) { console.warn('Customer registration details could not be updated.', error); }
+            }
+
+            sessionStorage.setItem('farmersHubLoginRole', 'customer');
+            sessionStorage.setItem('farmersHubCustomerPhone', phone);
             window.location.href = 'Customer Dashboard - FarmersHub.html';
         });
     </script>
