@@ -6,7 +6,7 @@
         .site-footer h2{margin:0 0 7px;color:#fff;font:700 19px Manrope,Arial,sans-serif}
         .site-footer p{margin:4px 0;color:#e1ecde;font-size:14px}
         .site-footer a{color:#d5edc9}
-        @media(max-width:600px){.site-footer{width:calc(100% - 22px);margin-top:14px;padding:20px;border-radius:14px}}</style></head>
+        @media(max-width:600px){.site-footer{width:calc(100% - 22px);margin-top:14px;padding:20px;border-radius:14px}}</style><style>.button-link:disabled{opacity:.55;cursor:not-allowed}.button-link:disabled:hover{background:#23643c}</style></head>
 
 <body>
 
@@ -41,7 +41,7 @@
 
 		<br>
 
-		<div class="form-actions"><a class="button-link home-button" href="index.html">Home</a><button id="registerButton" type="submit" form="farmerForm">Register</button><a class="button-link" href="Farmer Product Listing - FarmersHub.html">List Products</a></div>
+		<div class="form-actions"><a class="button-link home-button" href="index.html">Home</a><button id="registerButton" type="submit" form="farmerForm">Register</button><button id="listProductsButton" class="button-link" type="button" disabled aria-disabled="true">List Products</button></div><p id="listingAccessStatus" role="status">Register your complete farmer details to enable product listing.</p>
 
 		<div id="output"></div>
 
@@ -52,6 +52,32 @@ const farmerForm = document.getElementById('farmerForm');
 const farmerRecordKey = 'farmersHubCurrentFarmer';
 const farmerNameInput = document.getElementById('farmerName');
 const farmerPhoneInput = document.getElementById('contact');
+const listProductsButton = document.getElementById('listProductsButton');
+const farmLocationInput = document.getElementById('farmLocation');
+const output = document.getElementById('output');
+const listingAccessStatus = document.getElementById('listingAccessStatus');
+
+function isCompleteFarmer(farmer) {
+    return Boolean(farmer && farmer.id && farmer.name && farmer.name.trim() && farmer.location && farmer.location.trim() && /^[0-9]{10}$/.test(farmer.contact || ''));
+}
+
+try {
+    const savedFarmer = JSON.parse(localStorage.getItem(farmerRecordKey) || 'null');
+    if (isCompleteFarmer(savedFarmer)) {
+        farmerNameInput.value = savedFarmer.name;
+        farmLocationInput.value = savedFarmer.location;
+        farmerPhoneInput.value = savedFarmer.contact;
+        listProductsButton.disabled = false;
+        listProductsButton.removeAttribute('aria-disabled');
+        listingAccessStatus.textContent = 'Your saved farmer details are ready. You can now list products.';
+    }
+} catch (error) {
+    console.warn('Saved farmer details could not be loaded.', error);
+}
+
+listProductsButton.addEventListener('click', () => {
+    if (!listProductsButton.disabled) window.location.href = 'Farmer Product Listing - FarmersHub.html';
+});
 
 farmerNameInput.addEventListener('input', () => {
     farmerNameInput.value = farmerNameInput.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]/g, '');
@@ -63,24 +89,42 @@ farmerPhoneInput.addEventListener('input', () => {
 
 farmerForm.addEventListener('submit', (event) => {
     event.preventDefault();
+    const name = farmerNameInput.value.trim();
+    const location = farmLocationInput.value.trim();
+    const contact = farmerPhoneInput.value.trim();
+    if (!name || !location || !/^[0-9]{10}$/.test(contact)) {
+        output.textContent = 'Enter your name, farm location, and a valid 10-digit phone number before continuing.';
+        output.style.display = 'block';
+        return;
+    }
     let existingFarmer = null;
     try { existingFarmer = JSON.parse(localStorage.getItem(farmerRecordKey) || 'null'); } catch (error) { console.warn('Saved farmer details could not be loaded.', error); }
     const farmer = {
-        id: existingFarmer && existingFarmer.name === document.getElementById('farmerName').value.trim()
+        id: existingFarmer && existingFarmer.name === name
             ? existingFarmer.id
             : `FARMER-${Date.now().toString().slice(-6)}${Math.floor(Math.random() * 90 + 10)}`,
-        name: document.getElementById('farmerName').value.trim(),
-        location: document.getElementById('farmLocation').value.trim(),
-        contact: document.getElementById('contact').value.trim()
+        name,
+        location,
+        contact
     };
 
     try {
         localStorage.setItem(farmerRecordKey, JSON.stringify(farmer));
+        const savedFarmer = JSON.parse(localStorage.getItem(farmerRecordKey) || 'null');
+        if (!isCompleteFarmer(savedFarmer) || savedFarmer.id !== farmer.id) throw new Error('Farmer details could not be confirmed in browser storage.');
+        listProductsButton.disabled = false;
+        listProductsButton.removeAttribute('aria-disabled');
+        listingAccessStatus.textContent = 'Your details are saved. You can now proceed to list products.';
     } catch (error) {
         console.warn('Farmer details could not be saved in this browser.', error);
+        listProductsButton.disabled = true;
+        listProductsButton.setAttribute('aria-disabled', 'true');
+        listingAccessStatus.textContent = 'Save your complete farmer details before proceeding to list products.';
+        output.textContent = 'Your details could not be saved. Please check browser storage and try again before proceeding.';
+        output.style.display = 'block';
+        return;
     }
 
-    const output = document.getElementById('output');
     output.replaceChildren();
     const heading = document.createElement('h2');
     heading.textContent = 'Registration Successful!';
