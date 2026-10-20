@@ -19,12 +19,12 @@
 
 			<tr>
 			<td>Name</td>
-			<td><input type="text" id="customerName" pattern="[A-Za-zÀ-ÖØ-öø-ÿ .'-]+" title="Enter a name using letters only." autocomplete="name"></td>
+			<td><input type="text" id="customerName" pattern="[A-Za-zÀ-ÖØ-öø-ÿ .'-]+" title="Enter a name using letters only." autocomplete="name" required></td>
 			</tr>
 
 			<tr>
 			<td>Delivery Address</td>
-			<td><input type="text" id="address"></td>
+			<td><input type="text" id="address" autocomplete="street-address" required></td>
 			</tr>
 
 			<tr>
@@ -139,7 +139,7 @@
 
 			</div>
 
-		<div class="form-actions"><button class="home-button" type="button"><a href="index.html">Home</a></button><button type="button" onclick="placeOrder()">Place Order</button></div>
+		<div class="form-actions"><button class="home-button" type="button"><a href="index.html">Home</a></button><button type="button" onclick="registerCustomerDetails()">Save Registration Details</button><button type="button" onclick="placeOrder()">Place Order</button></div><p id="customerRegistrationStatus" role="status" aria-live="polite"></p>
 
 			<div id="invoice"></div>
 			
@@ -457,6 +457,50 @@ cartTable.addEventListener('click', (event) => {
     }
 });
 
+function registerCustomerDetails() {
+    const nameInput = document.getElementById('customerName');
+    const addressInput = document.getElementById('address');
+    const phoneInput = document.getElementById('contact');
+    const name = nameInput.value.trim();
+    const address = addressInput.value.trim();
+    const phone = phoneInput.value.trim();
+    const status = document.getElementById('customerRegistrationStatus');
+    status.textContent = '';
+
+    if (!name || !/^[A-Za-zÀ-ÖØ-öø-ÿ .'-]+$/.test(name)) {
+        alert('Enter your name using letters and spaces to register.');
+        nameInput.focus();
+        return;
+    }
+    if (!address) {
+        alert('Enter your delivery address to register.');
+        addressInput.focus();
+        return;
+    }
+    if (!/^\d{10}$/.test(phone)) {
+        alert('Enter your phone number using exactly 10 digits to register.');
+        phoneInput.focus();
+        return;
+    }
+
+    try {
+        const storedCustomers = JSON.parse(localStorage.getItem('farmersHubCustomers') || '[]');
+        const customers = Array.isArray(storedCustomers) ? storedCustomers : [];
+        const customer = customers.find((item) => item && item.phone === phone);
+        if (customer) {
+            customer.name = name;
+            customer.address = address;
+        } else {
+            customers.push({ phone, name, address, registeredAt: new Date().toISOString() });
+        }
+        localStorage.setItem('farmersHubCustomers', JSON.stringify(customers));
+        status.textContent = 'Your customer details are registered. You can now log in with this phone number.';
+    } catch (error) {
+        console.warn('Customer details could not be saved.', error);
+        status.textContent = 'Your details could not be saved. Please try again before logging in.';
+    }
+}
+
 function placeOrder() {
     const totalQuantity = cart.reduce((total, item) => total + Number(item.quantity), 0);
     if (cart.length === 0 || totalQuantity <= 0) {
@@ -466,14 +510,25 @@ function placeOrder() {
 
     const nameInput = document.getElementById('customerName');
     const rawCustomerName = nameInput.value.trim();
+    if (!rawCustomerName) {
+        alert('Enter your name to register your customer details.');
+        nameInput.focus();
+        return;
+    }
     if (rawCustomerName && !/^[\p{L}\p{M} .'-]+$/u.test(rawCustomerName)) {
         alert('Enter the customer name using letters only.');
         nameInput.focus();
         return;
     }
 
-    const customerName = rawCustomerName || 'Not provided';
-    const address = document.getElementById('address').value.trim() || 'Not provided';
+    const customerName = rawCustomerName;
+    const addressInput = document.getElementById('address');
+    const address = addressInput.value.trim();
+    if (!address) {
+        alert('Enter your delivery address to register your customer details.');
+        addressInput.focus();
+        return;
+    }
     const rawContact = document.getElementById('contact').value.trim();
     if (!/^\d{10}$/.test(rawContact)) {
         alert('Enter a phone number using exactly 10 digits.');
@@ -508,6 +563,19 @@ function placeOrder() {
         alert('The order could not be saved in this browser. Please check available storage and try again.');
         console.warn('Customer order could not be saved.', error);
         return;
+    }
+
+    try {
+        const existingCustomers = JSON.parse(localStorage.getItem('farmersHubCustomers') || '[]');
+        const customers = Array.isArray(existingCustomers) ? existingCustomers : [];
+        const existingCustomer = customers.find((customer) => customer.phone === contact);
+        const customer = existingCustomer || { phone: contact, registeredAt: new Date().toISOString() };
+        customer.name = customerName;
+        customer.address = address;
+        if (!existingCustomer) customers.push(customer);
+        localStorage.setItem('farmersHubCustomers', JSON.stringify(customers));
+    } catch (error) {
+        console.warn('Customer details were saved with the order but could not be added to the customer list.', error);
     }
 
     const farmerItems = cart.filter((item) => item.farmerId && item.productId);
